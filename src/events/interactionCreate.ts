@@ -6,24 +6,24 @@ import {
 import { Bot } from "../bot";
 
 export default function interactionCreate(
-	bot: Bot,
-	interaction: Interaction
+  bot: Bot,
+  interaction: Interaction
 ) {
-	const args: Array<CommandInteractionOption> = [];
+  const args: Array<CommandInteractionOption> = [];
 
   if (!interaction.isCommand()) {
-		return;
-	}
+    return;
+  }
 
-	for (const v of interaction.options.data) {
-		args.push(v)
-	}
+  for (const v of interaction.options.data) {
+    args.push(v)
+  }
 
   const command = bot.commands.get(interaction.commandName);
 
   if (command === undefined) {
-		return;
-	}
+    return;
+  }
 
   command.run(bot, interaction, args);
 }

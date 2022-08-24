@@ -1,10 +1,10 @@
 function hasImplemented(obj: any, ...attrs: string[]) {
-	for (const attr of attrs) {
-		if ((attr in obj) === false)
-			return false;
-	}
+  for (const attr of attrs) {
+    if ((attr in obj) === false)
+      return false;
+  }
 
-	return true;
+  return true;
 }
 
 export { hasImplemented };

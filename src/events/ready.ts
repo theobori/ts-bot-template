@@ -4,7 +4,6 @@ export default async function ready(bot: Bot) {
   const slashCommands = [];
 
   for (const [name, command] of bot.commands) {
-
     slashCommands.push(
       {
         name,
