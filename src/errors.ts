@@ -8,3 +8,4 @@ class BaseError extends Error {
 
 export class CommandError extends BaseError { };
 export class EventError extends BaseError { };
+export class DBError extends BaseError { };

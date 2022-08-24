@@ -3,10 +3,10 @@ import {
   CommandInteraction,
   CommandInteractionOption,
   Message 
-} from "discord.js";
+} from 'discord.js';
 
-import { Bot } from "../bot";
-import { hasImplemented } from "../utils/implemented";
+import { Bot } from '../bot';
+import { hasImplemented } from '../utils/implemented';
 
 interface ICommand {
   name: String,
@@ -25,11 +25,11 @@ interface ICommand {
 function isICommand(obj: any): boolean {
   return hasImplemented(
     obj,
-    "name",
-    "category",
-    "description",
-    "options",
-    "run"
+    'name',
+    'category',
+    'description',
+    'options',
+    'run'
   )
 }
 

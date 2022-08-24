@@ -7,8 +7,8 @@ function main() {
   const client = new Bot(
     {
       intents: [
-        "Guilds",
-        "GuildMembers"
+        'Guilds',
+        'GuildMembers'
       ],
 
       partials: [

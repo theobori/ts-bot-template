@@ -1,9 +1,9 @@
 import {
   CommandInteractionOption,
   Interaction 
-} from "discord.js";
+} from 'discord.js';
 
-import { Bot } from "../bot";
+import { Bot } from '../bot';
 
 export default function interactionCreate(
   bot: Bot,

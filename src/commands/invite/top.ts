@@ -4,10 +4,10 @@ import {
   CommandInteraction,
   CommandInteractionOption,
   Message 
-} from "discord.js";
+} from 'discord.js';
 
-import { Bot } from "../../bot";
-import { ICommand } from "../../interfaces/command";
+import { Bot } from '../../bot';
+import { ICommand } from '../../interfaces/command';
 
 export default class implements ICommand {
   name: String;
@@ -16,9 +16,9 @@ export default class implements ICommand {
   options: ApplicationCommandOption[];
 
   constructor() {
-    this.name = "top";
-    this.category = "invite";
-    this.description = "Show top 20 inviters";
+    this.name = 'top';
+    this.category = 'invite';
+    this.description = 'Show top 20 inviters';
     this.options = [];
   }
 
@@ -29,7 +29,7 @@ export default class implements ICommand {
   ) {
     message.reply(
       {
-        content: "top"
+        content: 'top'
       }
     );
   }

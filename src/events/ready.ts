@@ -1,4 +1,5 @@
-import { Bot } from "../bot";
+import { Bot } from '../bot';
+import { Logs } from '../services/logs';
 
 export default async function ready(bot: Bot) {
   const slashCommands = [];
@@ -13,6 +14,9 @@ export default async function ready(bot: Bot) {
       }
     );
   }
+
+  const botName = bot.user.username + '#' + bot.user.discriminator
+  Logs.info(botName + ' is ready')
 
   await bot.application?.commands.set(slashCommands);
 }

@@ -2,17 +2,17 @@ import {
   Client,
   ClientOptions,
   Collection
-} from "discord.js";
+} from 'discord.js';
 import { join } from 'path';
 
-import { CommandError, EventError } from "./errors";
-import { ICommand, isICommand } from "./interfaces/command";
+import { CommandError, EventError } from './errors';
+import { ICommand, isICommand } from './interfaces/command';
 
-import { files } from "./utils/file";
+import { files } from './utils/files';
 
 class Bot extends Client {
-  private commandsDir: string = "commands/";
-  private eventsDir: string = "events/";
+  private commandsDir: string = 'commands/';
+  private eventsDir: string = 'events/';
 
   commands: Collection<string, ICommand> = new Collection();
 
@@ -30,13 +30,13 @@ class Bot extends Client {
     
     for (let category of categories) {
       // Relative path for `require`
-      category = category.replace(__dirname, ".");
+      category = category.replace(__dirname, '.');
 
       const command = new (require(category).default)();
 
       if (isICommand(command) === false) {
         throw new CommandError(
-          "This class doesn't implement ICommand"
+          'This class doesn\'t implement ICommand'
         );
       }
 
@@ -51,17 +51,17 @@ class Bot extends Client {
     const events = files.list(dir);
 
     for (const filename of events) {
-      const path = "./" + this.eventsDir + filename;
+      const path = './' + this.eventsDir + filename;
       const event = require(path).default;
 
-      if (typeof event !== "function") {
+      if (typeof event !== 'function') {
         throw new EventError(
-          "Event has to be a function"
+          'Event has to be a function'
         );
       }
 
       // Event Name
-      const name = filename.split(".")[0];
+      const name = filename.split('.')[0];
 
       // 'Mapping' the event function
       this.on(

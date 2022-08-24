@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
       "incremental": true,
-      "target": "es6",
+      "target": "esnext",
       "outDir": "./build",
       "rootDir": "./src",
-      "moduleResolution": "node",
+      "moduleResolution": "Node",
       "module": "commonjs",
       "declaration": false,
+      "allowJs": true,
       "inlineSourceMap": true,
       "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
       "resolveJsonModule": true /* Include modules imported with .json extension. */,
@@ -33,7 +34,7 @@
       "listFiles": false /* Print names of files part of the compilation. */,
       "pretty": true /* Stylize errors and messages using color and context. */,
     },
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules/**"],
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"],
     "compileOnSave": false
   }

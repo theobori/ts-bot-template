@@ -1,9 +1,9 @@
 import {
   statSync,
   readdirSync 
-} from "fs";
+} from 'fs';
 
-import { join } from "path";
+import { join } from 'path';
 
 const dirs = {
   list: function(path: string): string[] {
@@ -32,7 +32,7 @@ const files = {
       }
     }
     return (ret.map(name => name
-      .replace(dirPath + "/", ""))
+      .replace(dirPath + '/', ''))
     )
   }
 }
