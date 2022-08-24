@@ -1,0 +1,29 @@
+{
+  "name": "ts-bot-template",
+  "version": "1.0.0",
+  "description": "Discord bot template",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "run-p build:*",
+    "build:main": "tsc",
+    "dev": "ts-node src/index.ts",
+    "start": "npm run build:main && node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theobori/ts-bot-template.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/theobori/ts-bot-template/issues"
+  },
+  "homepage": "https://github.com/theobori/ts-bot-template#readme",
+  "dependencies": {
+    "discord.js": "^14.3.0",
+    "dotenv": "^10.0.0",
+    "fs": "^0.0.1-security",
+    "mongoose": "^6.0.7",
+    "path": "^0.12.7",
+    "ts-node": "^10.9.1"
+  }
+}
