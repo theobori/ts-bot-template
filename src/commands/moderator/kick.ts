@@ -15,29 +15,26 @@ import { ICommand } from '../../interfaces/command';
 import { ErrorEmbed } from '../../utils/msg';
 
 export default class implements ICommand {
-  name: String;
-  category: String;
-  description: String;
-  options: ApplicationCommandOption[];
+  name = 'kick';
+  category = 'moderator';
+  description = 'Kick a guild member';
+  options: ApplicationCommandOption[] = [
+    {
+      name: 'member',
+      type: ApplicationCommandOptionType.User,
+      required: true,
+      description: 'The member to kick',
+    },
+    {
+      name: 'reason',
+      type: ApplicationCommandOptionType.String,
+      required: false,
+      description: 'An optional reason',
+    }
+  ];
 
   constructor() {
-    this.name = 'kick';
-    this.category = 'moderator';
-    this.description = 'Kick a guild member';
-    this.options = [
-      {
-        name: 'member',
-        type: ApplicationCommandOptionType.User,
-        required: true,
-        description: 'The member to kick',
-      },
-      {
-        name: 'reason',
-        type: ApplicationCommandOptionType.String,
-        required: false,
-        description: 'An optional reason',
-      }
-    ];
+
   }
 
   async run(

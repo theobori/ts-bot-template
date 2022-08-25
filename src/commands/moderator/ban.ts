@@ -14,16 +14,13 @@ import { ICommand } from '../../interfaces/command';
 import { ErrorEmbed } from '../../utils/msg';
 
 export default class implements ICommand {
-  name: String;
-  category: String;
-  description: String;
-  options: ApplicationCommandOption[];
+  name = 'ban';
+  category = 'moderator';
+  description = 'Ban a guild member';
+  options: ApplicationCommandOption[] = [];
 
   constructor() {
-    this.name = 'ban';
-    this.category = 'moderator';
-    this.description = 'Ban a guild member';
-    this.options = [];
+
   }
 
   async run(

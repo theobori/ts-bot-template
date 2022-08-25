@@ -10,16 +10,13 @@ import { Bot } from '../../bot';
 import { ICommand } from '../../interfaces/command';
 
 export default class implements ICommand {
-  name: String;
-  category: String;
-  description: String;
+  name = 'mute';
+  category = 'moderator';
+  description = 'Mute a guild member';
   options: ApplicationCommandOption[];
 
   constructor() {
-    this.name = 'mute';
-    this.category = 'moderator';
-    this.description = 'Mute a guild member';
-    this.options = [];
+
   }
 
   run(

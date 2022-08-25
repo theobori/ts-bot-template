@@ -1,5 +1,6 @@
 import {
     ApplicationCommandOption,
+    ApplicationCommandOptionType,
     CacheType,
     CommandInteraction,
     CommandInteractionOption,
@@ -10,16 +11,20 @@ import { Bot } from '../../bot';
 import { ICommand } from '../../interfaces/command';
 
 export default class implements ICommand {
-  name: String;
-  category: String;
-  description: String;
-  options: ApplicationCommandOption[];
+  name = 'clear';
+  category = 'moderator';
+  description = 'Clear a certain amount of messages in this channel';
+  options: ApplicationCommandOption[] = [
+    {
+      name: 'amount',
+      type: ApplicationCommandOptionType.Number,
+      required: false,
+      description: 'Amount of messages to delete',
+    }
+  ];
 
   constructor() {
-    this.name = 'clear';
-    this.category = 'moderator';
-    this.description = 'Clear a certain amount of messages in this channel';
-    this.options = [];
+
   }
 
   run(
