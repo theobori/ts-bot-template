@@ -1,38 +1,89 @@
 import {
     ApplicationCommandOption,
+    ApplicationCommandOptionType,
     CacheType,
     CommandInteraction,
     CommandInteractionOption,
-    Message 
+    GuildMember,
+    Message,
+    EmbedBuilder,
+    PermissionsBitField
   } from 'discord.js';
   
-  import { Bot } from '../../bot';
-  import { ICommand } from '../../interfaces/command';
-  
-  export default class implements ICommand {
-    name: String;
-    category: String;
-    description: String;
-    options: ApplicationCommandOption[];
-  
-    constructor() {
-      this.name = 'kick';
-      this.category = 'moderator';
-      this.description = 'Kick a guild member';
-      this.options = [];
-    }
-  
-    run(
-      _bot: Bot,
-      message: Message<boolean> | CommandInteraction<CacheType>,
-      _args: Array<String | CommandInteractionOption>
-    ) {
+import { Bot } from '../../bot';
+import { ICommand } from '../../interfaces/command';
+import { ErrorEmbed } from '../../utils/msg';
+
+export default class implements ICommand {
+  name: String;
+  category: String;
+  description: String;
+  options: ApplicationCommandOption[];
+
+  constructor() {
+    this.name = 'kick';
+    this.category = 'moderator';
+    this.description = 'Kick a guild member';
+    this.options = [
+      {
+        name: 'member',
+        type: ApplicationCommandOptionType.User,
+        required: true,
+        description: 'The member to kick',
+      },
+      {
+        name: 'reason',
+        type: ApplicationCommandOptionType.String,
+        required: false,
+        description: 'An optional reason',
+      }
+    ];
+  }
+
+  async run(
+    _bot: Bot,
+    message: Message<boolean> | CommandInteraction<CacheType>,
+    args: Array<CommandInteractionOption>
+  ) {
+    let [ target, reason ] = args;
+    const member = target.member as GuildMember;
+    const author = message.member as GuildMember;
+    let reasonStr = 'No reason';
+
+    // Check permissions
+    if (author.permissions.has(PermissionsBitField.Flags.KickMembers) === false) {
       message.reply(
-        {
-          content: 'kick'
-        }
+        { embeds: [ErrorEmbed.wrong()] }
       );
+      return;
     }
-  
-  };
+
+    // Check for the optional reason
+    if (reason) {
+      reasonStr = reason.value.toString();
+    }
+
+    // Try to kick the member
+    try {
+      await member.kick();
+    } catch (error) {
+      message.reply(
+        { embeds: [ErrorEmbed.wrong()] }
+      );
+      return;
+    }
+
+    const embed = new EmbedBuilder()
+      .setTitle('Kick')
+      .setColor(0xbaf2bb)
+      .addFields(
+        { name: 'Member', value: member.toString() },
+        { name: 'Reason', value: reasonStr }
+      );
+
+    message.reply(
+      { embeds: [embed] }
+    );
+  }
+};
   

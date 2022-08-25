@@ -18,7 +18,7 @@ interface ICommand {
   run: (
     bot: Bot,
     message: Message | CommandInteraction,
-    args: Array<String | CommandInteractionOption>
+    args: Array<CommandInteractionOption>
   ) => void;
 }
 

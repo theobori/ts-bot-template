@@ -2,8 +2,8 @@
     "compilerOptions": {
       "incremental": true,
       "target": "esnext",
-      "outDir": "./build",
-      "rootDir": "./src",
+      "outDir": "build",
+      "rootDir": "src",
       "moduleResolution": "Node",
       "module": "commonjs",
       "declaration": false,
@@ -34,7 +34,7 @@
       "listFiles": false /* Print names of files part of the compilation. */,
       "pretty": true /* Stylize errors and messages using color and context. */,
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*.ts"],
     "exclude": ["node_modules"],
     "compileOnSave": false
   }

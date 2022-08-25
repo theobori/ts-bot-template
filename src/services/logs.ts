@@ -11,11 +11,34 @@ enum LogLevel {
 class Logs {
   private static send(level: LogLevel, message: string) {
     const datetime = formattedDateTime();
-    
     const levelString = '[' + level + ']';
+
     message = levelString + ' ' + '[' + datetime + '] ' + message
 
-    console.log(message);
+    let log;
+    
+    switch (level) {
+      case LogLevel.CRITICAL:
+        log = console.error
+        break;
+      case LogLevel.ERROR:
+        log = console.error
+        break;
+      case LogLevel.WARNING:
+        log = console.warn
+        break;
+      case LogLevel.INFO:
+        log = console.info
+        break;
+      case LogLevel.DEBUG:
+        log = console.trace
+        break;
+      default:
+        log = console.log
+        break;
+    }
+
+    log(message);
   };
 
   static critical(message: string) {

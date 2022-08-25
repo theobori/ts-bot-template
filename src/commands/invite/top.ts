@@ -25,7 +25,7 @@ export default class implements ICommand {
   run(
     _bot: Bot,
     message: Message<boolean> | CommandInteraction<CacheType>,
-    _args: Array<String | CommandInteractionOption>
+    _args: Array<CommandInteractionOption>
   ) {
     message.reply(
       {

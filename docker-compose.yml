@@ -1,0 +1,20 @@
+version: "3.5"
+
+services:
+  # MongoDB
+
+  # Discord bot
+  bot_template:
+    image: node:latest
+    container_name: bot_template
+    volumes:
+      - ./:/bot
+    working_dir: /bot
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+    - |
+      npm i
+      npm run build
+      npm run start
+    # environment:
+    #   PORT: ${TW_UTILS_PORT}
