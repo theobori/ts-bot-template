@@ -1,4 +1,5 @@
-import { formattedDateTime } from '../utils/datetime';
+import { FormattedDateTime } from '../utils/datetime';
+import { files } from '../utils/files';
 
 enum LogLevel {
   CRITICAL = 'CRITICAL',
@@ -8,57 +9,132 @@ enum LogLevel {
   DEBUG = 'DEBUG'
 }
 
-class Logs {
-  private static send(level: LogLevel, message: string) {
-    const datetime = formattedDateTime();
-    const levelString = '[' + level + ']';
+enum LogOutput {
+  STDOUT,
+  FILE,
+  ALL
+}
 
-    message = levelString + ' ' + '[' + datetime + '] ' + message
+class Log {
+  private level?: LogLevel;
+  private message?: string;
+  private output?: LogOutput;
+  private logger?: (msg: string) => void;
 
-    let log;
+  constructor(output: LogOutput = LogOutput.ALL) {
+    this.output = output;
+    this.logger = console.log;
+  }
+
+  setLevel(level: LogLevel): Log {
+    this.level = level;
     
-    switch (level) {
+    return this;
+  }
+
+  setMessage(message: string): Log {
+    this.message = message;
+    
+    return this;
+  }
+
+  setOutput(output: LogOutput): Log {
+    this.output = output;
+
+    return this;
+  }
+
+  private setLoggerWithLevel(): Log {
+    switch (this.level) {
       case LogLevel.CRITICAL:
-        log = console.error
+        this.logger = console.error;
         break;
       case LogLevel.ERROR:
-        log = console.error
+        this.logger = console.error;
         break;
       case LogLevel.WARNING:
-        log = console.warn
+        this.logger = console.warn;
         break;
       case LogLevel.INFO:
-        log = console.info
+        this.logger = console.info;
         break;
       case LogLevel.DEBUG:
-        log = console.trace
+        this.logger = console.trace;
         break;
       default:
-        log = console.log
+        this.logger = console.log;
         break;
     }
 
-    log(message);
+    return this;
+  }
+
+  private writeOutput(output: LogOutput) {
+    switch (output) {
+      case LogOutput.FILE:
+        const ext = '.log';
+        const filename = process.env.LOG_DIR + FormattedDateTime.date;
+
+        files.append(filename + ext, this.message + '\n');
+        break;
+      case LogOutput.STDOUT:
+        this.logger(this.message);
+        break;
+      case LogOutput.ALL:
+        this.writeOutput(LogOutput.FILE);
+        this.writeOutput(LogOutput.STDOUT);
+        break;
+      default:
+        break;
+    }
+  }
+
+  run() {
+    this
+      .setLoggerWithLevel()
+      .writeOutput(this.output);
+  }
+}
+
+class Logs {
+  // private static output(logOutput: LogOutput,)
+
+  private static send(
+    level: LogLevel,
+    message: string,
+    output: LogOutput = LogOutput.ALL
+  ) {
+    // Quick message formatting
+    const datetime = FormattedDateTime.datetime;
+    const levelString = '[' + level + ']';
+
+    message = levelString + ' ' + '[' + datetime + '] ' + message;
+
+    new Log()
+      .setLevel(level)
+      .setMessage(message)
+      .setOutput(output)
+      .run();
   };
 
   static critical(message: string) {
-    Logs.send(LogLevel.CRITICAL, message);
+    this.send(LogLevel.CRITICAL, message);
   }
 
   static error(message: string) {
-    Logs.send(LogLevel.ERROR, message);
+    this.send(LogLevel.ERROR, message);
   }
 
   static warning(message: string) {
-    Logs.send(LogLevel.WARNING, message);
+    this.send(LogLevel.WARNING, message);
   }
 
   static info(message: string) {
-    Logs.send(LogLevel.INFO, message);
+    this.send(LogLevel.INFO, message);
   }
 
   static debug(message: string) {
-    Logs.send(LogLevel.DEBUG, message);
+    this.send(LogLevel.DEBUG, message);
   }
 }
 
