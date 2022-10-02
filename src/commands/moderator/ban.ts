@@ -6,7 +6,8 @@ import {
     GuildMember,
     EmbedBuilder,
     Message, 
-    PermissionsBitField
+    PermissionsBitField,
+    ApplicationCommandOptionType
   } from 'discord.js';
   
 import { Bot } from '../../bot';
@@ -17,7 +18,20 @@ export default class implements ICommand {
   name = 'ban';
   category = 'moderator';
   description = 'Ban a guild member';
-  options: ApplicationCommandOption[] = [];
+  options: ApplicationCommandOption[] = [
+    {
+      name: 'member',
+      type: ApplicationCommandOptionType.User,
+      required: true,
+      description: 'The member to ban',
+    },
+    {
+      name: 'reason',
+      type: ApplicationCommandOptionType.String,
+      required: false,
+      description: 'An optional reason',
+    }
+  ];
 
   constructor() {
 
