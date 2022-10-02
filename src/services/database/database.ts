@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { MongoClient, Collection, Document } from 'mongodb';
 
 import { DBError } from '../../errors';
-import { IConnection } from '../../interfaces/connection';
+import IConnection from '../../interfaces/connection';
 
 import { Logs } from "../../services/logs";
 

@@ -32,7 +32,7 @@ npm run dev
 
 **Launch containers**
 
-You need some environment variables that are in `config/mongo.env`:
+You need some environment variables:
 
 - `MONGO_INITDB_ROOT_USERNAME`
 - `MONGO_INITDB_ROOT_PASSWORD`
@@ -44,7 +44,7 @@ docker-compose up
 ```
 
 
-**Reset environment variables for MongoDB**
+**Reset (cache) environment variables for MongoDB**
 
 ```bash
 docker-compose rm -fv bot_mongo

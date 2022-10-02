@@ -8,7 +8,7 @@ import {
   } from 'discord.js';
   
 import { Bot } from '../../bot';
-import { ICommand } from '../../interfaces/command';
+import ICommand from '../../interfaces/command';
 
 export default class implements ICommand {
   name = 'clear';
@@ -27,12 +27,12 @@ export default class implements ICommand {
 
   }
 
-  run(
+  async run(
     _bot: Bot,
     message: Message<boolean> | CommandInteraction<CacheType>,
     _args: Array<CommandInteractionOption>
   ) {
-    message.reply(
+    await message.reply(
       {
         content: 'clear'
       }

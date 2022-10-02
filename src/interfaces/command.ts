@@ -8,7 +8,7 @@ import {
 import { Bot } from '../bot';
 import { hasImplemented } from '../utils/implemented';
 
-interface ICommand {
+export default interface ICommand {
   name: String,
   category: String,
   description: String,
@@ -33,4 +33,4 @@ function isICommand(obj: any): boolean {
   )
 }
 
-export { ICommand, isICommand };
+export { isICommand };

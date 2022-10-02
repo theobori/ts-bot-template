@@ -10,7 +10,7 @@ import {
   } from 'discord.js';
   
 import { Bot } from '../../bot';
-import { ICommand } from '../../interfaces/command';
+import ICommand from '../../interfaces/command';
 import { ErrorEmbed } from '../../utils/msg';
 
 export default class implements ICommand {
@@ -64,7 +64,7 @@ export default class implements ICommand {
         { name: 'Reason', value: reasonStr }
       );
 
-    message.reply(
+    await message.reply(
       { embeds: [embed] }
     );
   }
