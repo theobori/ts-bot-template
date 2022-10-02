@@ -1,13 +1,16 @@
-version: "3.5"
+version: "3.7"
 
 services:
   # MongoDB
-  # bot_mongo:
-  #   image: mongo
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: example
+  bot_mongo:
+    image: mongo
+    container_name: bot_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - 1234:27017
+    restart: always
 
   # Discord bot
   bot_template:
@@ -22,4 +25,8 @@ services:
       npm i
       npm run build
       npm run start
+    environment:
+      MONGO: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@bot_mongo?authSource=admin
+    depends_on:
+      - bot_mongo
     restart: always

@@ -69,7 +69,7 @@ class Log {
     return this;
   }
 
-  private writeOutput(output: LogOutput) {
+  private writeOutput(output: LogOutput): Log {
     switch (output) {
       case LogOutput.FILE:
         const ext = '.log';
@@ -87,6 +87,8 @@ class Log {
       default:
         break;
     }
+
+    return this;
   }
 
   run() {
@@ -102,7 +104,7 @@ class Logs {
   private static send(
     level: LogLevel,
     message: string,
-    output: LogOutput = LogOutput.ALL
+    output: LogOutput
   ) {
     // Quick message formatting
     const datetime = FormattedDateTime.datetime;
@@ -117,24 +119,24 @@ class Logs {
       .run();
   };
 
-  static critical(message: string) {
-    this.send(LogLevel.CRITICAL, message);
+  static critical(message: string, output: LogOutput = LogOutput.ALL) {
+    this.send(LogLevel.CRITICAL, message, output);
   }
 
-  static error(message: string) {
-    this.send(LogLevel.ERROR, message);
+  static error(message: string, output: LogOutput = LogOutput.ALL) {
+    this.send(LogLevel.ERROR, message, output);
   }
 
-  static warning(message: string) {
-    this.send(LogLevel.WARNING, message);
+  static warning(message: string, output: LogOutput = LogOutput.ALL) {
+    this.send(LogLevel.WARNING, message, output);
   }
 
-  static info(message: string) {
-    this.send(LogLevel.INFO, message);
+  static info(message: string, output: LogOutput = LogOutput.ALL) {
+    this.send(LogLevel.INFO, message, output);
   }
 
-  static debug(message: string) {
-    this.send(LogLevel.DEBUG, message);
+  static debug(message: string, output: LogOutput = LogOutput.ALL) {
+    this.send(LogLevel.DEBUG, message, output);
   }
 }
 

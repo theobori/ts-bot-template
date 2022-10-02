@@ -9,7 +9,6 @@ lib-cov
 *.swp
 
 pids
-logs
 results
 tmp
 
@@ -21,6 +20,7 @@ coverage
 
 # API keys and secrets
 .env
+mongo.env
 
 # Dependency directory
 node_modules

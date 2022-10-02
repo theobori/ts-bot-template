@@ -3,16 +3,16 @@ import { Document, Schema, model } from 'mongoose';
 interface IInvite extends Document {
   guild_id: string;
   user_id: string;
+  invites: number;
   invited_by: string;
-  amount: number
 };
 
 const inviteSchema = new Schema<IInvite>(
   {
     guild_id: { type: String, required: true, index: true },
     user_id: { type: String, required: true, index: true },
-    amount: { type: Number, required: true },
-    invited_by: Number
+    invites: { type: Number, required: true, default: 0 },
+    invited_by: { type: String, required: false },
   }
 );
 

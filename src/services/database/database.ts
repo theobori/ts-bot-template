@@ -1,13 +1,15 @@
 import 'dotenv/config';
-import { MongoClient } from 'mongodb';
+import { MongoClient, Collection, Document } from 'mongodb';
 
 import { DBError } from '../../errors';
 import { IConnection } from '../../interfaces/connection';
 
+import { Logs } from "../../services/logs";
+
 class Mongo {
   private static conn?: IConnection = undefined;
 
-  static async connect(): Promise<IConnection> {
+  static createConnection(): IConnection {
     if (Mongo.conn) {
       return Mongo.conn;
     }
@@ -21,10 +23,20 @@ class Mongo {
 
       Mongo.conn = { client, db, collections };
 
+      Logs.info("[+] Connection to the database created");
+
       return Mongo.conn;
     } catch (error) {
         throw new DBError(error);
     }
+  }
+
+  static closeConnection() {
+    this.conn.client.close();
+  }
+
+  static get collections(): Record<string, Collection<Document>> {
+    return this.conn.collections;
   }
 }
 
