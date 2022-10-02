@@ -59,7 +59,10 @@ class RequestsDatabase {
         'client_id': clientId
       },
       {
-        'invited_by': inviter
+        '$set': {
+          'invited_by': inviter,
+          'invites': 0
+        }
       },
       {
         'upsert': true

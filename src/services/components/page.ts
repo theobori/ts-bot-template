@@ -8,7 +8,7 @@ import IPageComponent from '../../interfaces/pageComponent';
 
 import Page from '../../utils/page';
 
-class AbstractPageComponent<T> extends Page<T> implements IPageComponent{
+abstract class AbstractPageComponent<T> extends Page<T> implements IPageComponent{
   protected message: Message<boolean>;
 
   protected previousId: string = 'previous';

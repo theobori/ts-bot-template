@@ -11,7 +11,7 @@ import {
   
 import { Bot } from '../../bot';
 import ICommand from '../../interfaces/command';
-import { ErrorEmbed } from '../../utils/msg';
+import ErrorEmbed from '../../utils/msg';
 
 export default class implements ICommand {
   name = 'ban';

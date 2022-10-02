@@ -4,6 +4,7 @@ import {
 } from 'discord.js';
 
 import { Bot } from '../bot';
+import { Logs } from '../services/logs';
 
 export default function interactionCreate(
   bot: Bot,
@@ -20,6 +21,14 @@ export default function interactionCreate(
   }
 
   const command = bot.commands.get(interaction.commandName);
+  const user = interaction.user;
+
+  Logs.info(
+    user.username + '#' + user.discriminator +
+    ' used /' + interaction.commandName + 
+    ' in #' + interaction.channel.name +
+    ' of ' + interaction.guild.name
+  );
 
   if (command === undefined) {
     return;

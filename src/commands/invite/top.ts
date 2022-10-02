@@ -4,15 +4,19 @@ import {
   CommandInteraction,
   CommandInteractionOption,
   EmbedBuilder,
-  Message
+  Message,
 } from 'discord.js';
+
+import {
+  Document,
+  WithId,
+} from 'mongodb';
 
 import { Bot } from '../../bot';
 import ICommand from '../../interfaces/command';
-
 import dbRequests from '../../services/database/requests';
-
 import AbstractPageComponent from '../../services/components/page';
+import ErrorEmbed from '../../utils/msg';
 
 type InviteContent = {
   inviter: string;
@@ -65,9 +69,9 @@ extends AbstractPageComponent<InviteContent> {
     });
 
     collector.on('collect', async i => {
-      // if (i.user.id !== this.messag) {
-      //   return;
-      // }
+      if (i.user.id !== this.message.member.id) {
+        return;
+      }
 
       switch (i.customId) {
         case this.previousId:
@@ -81,7 +85,6 @@ extends AbstractPageComponent<InviteContent> {
       }
 
       await i.deferUpdate();
-
       await i.editReply(
         {
           embeds: [ this.createEmbed() ],
@@ -115,65 +118,43 @@ export default class implements ICommand {
     this.options = [];
   }
 
+  private async formatDocuments(
+    bot: Bot,
+    documents: WithId<Document>[]
+  ): Promise<InviteContent[]> {
+    const ret: InviteContent[] = [];
+
+    for (const invite of documents) {
+      const user = await bot.users.fetch(invite.client_id);
+      ret.push({
+        inviter: '`' + user.username + '#' + user.discriminator + '`',
+        invites: invite.invites
+      });
+    }
+
+    return ret;
+  }
+
   async run(
-    _bot: Bot,
+    bot: Bot,
     message: Message<boolean> | CommandInteraction<CacheType>,
     _args: Array<CommandInteractionOption>
   ) {
     const topInvites = dbRequests.getTopInvites(message.guildId, 20);
     const documents = await topInvites.toArray();
-    
-    if (documents.length === 0) {
-      console.log('empty')
+
+    if (documents.length == 0) {
+      await message.reply({embeds: [ ErrorEmbed.notFound() ]});
+      return;
     }
 
-    // new AbstractPageComponent(5)
-    //   .setMessage(message as Message<boolean>)
-    //   .addContent([
-    //     "1","2","3","4","5","6","7","8","9","10"
-    //   ])
-    //   .reply();
+    const inviteContents = await this.formatDocuments(bot, documents);
+    const component = new InvitePageComponent()
+      .setMaxLines(10)
+      .setMessage(message as Message<boolean>)
+      .addContent(inviteContents);
     
-      const component = new InvitePageComponent()
-        .setMaxLines(5)
-        .setMessage(message as Message<boolean>)
-        .addContent([
-          {
-            inviter: '1',
-            invites: 12
-          },
-          {
-            inviter: '2',
-            invites: 12
-          },
-          {
-            inviter: '3',
-            invites: 12
-          },
-          {
-            inviter: '4',
-            invites: 12
-          },
-          {
-            inviter: '5',
-            invites: 12
-          },
-          {
-            inviter: '6',
-            invites: 12
-          },
-          {
-            inviter: '7',
-            invites: 12
-          }
-        ])
-      
-      await component.collect();
-      await component.reply();
-
-    
-
-    // const author = message.member as GuildMember;
+    await component.collect();
+    await component.reply();
   }
-
 };

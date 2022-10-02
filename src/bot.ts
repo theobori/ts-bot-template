@@ -17,6 +17,7 @@ class Bot extends Client {
   private eventsDir: string = 'events/';
 
   commands: Collection<string, ICommand> = new Collection();
+  invites: Collection<string, Collection<string, number>> = new Collection();
 
   constructor(options: ClientOptions) {
     super(options);

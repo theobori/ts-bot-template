@@ -10,6 +10,8 @@ import {
 import { Bot } from '../../bot';
 import ICommand from '../../interfaces/command';
 
+import RequestsDatabase from '../../services/database/requests';
+
 export default class implements ICommand {
   name = 'clear';
   category = 'moderator';
@@ -32,6 +34,10 @@ export default class implements ICommand {
     message: Message<boolean> | CommandInteraction<CacheType>,
     _args: Array<CommandInteractionOption>
   ) {
+    console.log(message.guildId, message.member.user.id);
+  
+    RequestsDatabase.updateInviter(message.guildId, message.member.user.id)
+  
     await message.reply(
       {
         content: 'clear'
