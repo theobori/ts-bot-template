@@ -58,6 +58,10 @@ extends AbstractPageComponent<InviteContent> {
         }
       );
   }
+
+  async reply() {
+    await this.message.followUp(this.createOptions());
+  }
 }
 
 export default class implements ICommand {
@@ -95,8 +99,11 @@ export default class implements ICommand {
     message: Message<boolean> | CommandInteraction<CacheType>,
     _args: Array<CommandInteractionOption>
   ) {
+    const interaction = message as CommandInteraction<CacheType>;
     const topInvites = dbRequests.getTopInvites(message.guildId, 20);
     const documents = await topInvites.toArray();
+
+    await interaction.deferReply();
 
     if (documents.length == 0) {
       await message.reply({embeds: [ ErrorEmbed.notFound() ]});
@@ -106,7 +113,7 @@ export default class implements ICommand {
     const inviteContents = await this.formatDocuments(bot, documents);
     const component = new InvitePageComponent()
       .setMaxLines(10)
-      .setMessage(message as Message<boolean>)
+      .setMessage(interaction)
       .addContent(inviteContents);
     
     await component.collect();

@@ -1,27 +1,33 @@
 import {
-  Message,
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
   MessagePayload,
-  WebhookEditMessageOptions
+  WebhookEditMessageOptions,
+  CommandInteraction,
+  CacheType
 } from 'discord.js';
-import IPageComponent from '../../interfaces/pageComponent';
 
+import { v4 as uuidv4 } from 'uuid';
+
+import IPageComponent from '../../interfaces/pageComponent';
 import Page from '../../utils/page';
 
 abstract class AbstractPageComponent<T> extends Page<T> implements IPageComponent {
-  protected message: Message<boolean>;
+  protected message: CommandInteraction<CacheType>;
 
-  protected previousId: string = 'previous';
-  protected nextId: string = 'next';
+  protected previousId: string;
+  protected nextId: string;
 
   constructor(maxLines: number = 10) {
     super(maxLines);
+
+    this.previousId = uuidv4();
+    this.nextId = uuidv4();
   }
 
-  setMessage(message: Message<boolean>): this {
+  setMessage(message: CommandInteraction<CacheType>): this {
     this.message = message;
     
     return this;
@@ -53,7 +59,7 @@ abstract class AbstractPageComponent<T> extends Page<T> implements IPageComponen
     return new EmbedBuilder();
   }
 
-  private createOptions()
+  protected createOptions()
   : string | MessagePayload | WebhookEditMessageOptions {
     return {
       embeds: [ this.createEmbed() ],
@@ -61,13 +67,19 @@ abstract class AbstractPageComponent<T> extends Page<T> implements IPageComponen
     };
   }
 
-  collect() {
-    const collector = this.message.channel.createMessageComponentCollector({
-      time: 1000 * 60
-    });
+  async collect() {
+    const collector = this.message.channel.createMessageComponentCollector(
+      {
+        time: 1000 * 60
+      }
+    );
 
     collector.on('collect', async i => {
-      if (i.user.id !== this.message.member.id) {
+      if (i.user.id !== this.message.member.user.id) {
+        return;
+      }
+
+      if (i.customId !== this.nextId && i.customId !== this.previousId) {
         return;
       }
 
@@ -83,8 +95,8 @@ abstract class AbstractPageComponent<T> extends Page<T> implements IPageComponen
       }
 
       await i.deferUpdate();
-      await i.editReply(this.createOptions()); 
-
+      await i.editReply(this.createOptions());
+      
     });
   }
 
