@@ -1,4 +1,5 @@
 import {
+  APIEmbedField,
   ApplicationCommandOption,
   CacheType,
   CommandInteraction,
@@ -17,6 +18,7 @@ import ICommand from '../../interfaces/command';
 import dbRequests from '../../services/database/requests';
 import AbstractPageComponent from '../../services/components/page';
 import ErrorEmbed from '../../utils/msg';
+import capitalize from '../../utils/capitalize';
 
 type InviteContent = {
   inviter: string;
@@ -29,79 +31,32 @@ extends AbstractPageComponent<InviteContent> {
     super();
   }
 
-  private inviteContentToString(
-    currentContent: InviteContent[],
-    func: (content: InviteContent) => string
-  ): string {
-    return currentContent.map(content => {
-      return func(content);
-    }).join('\n');
+  private autoCreateFields(): APIEmbedField[] {
+    const currentContent = this.getCurrentContent();
+    const model = currentContent[0] || [];
+
+    return Object.keys(model).map(name => {
+      return {
+        name: capitalize(name),
+        value: currentContent.map(content => { 
+          return content[name].toString()
+        }).join('\n'),
+        inline: true
+    };
+    });
   }
 
-  private createEmbed(): EmbedBuilder {
-    const currentContent = this.getCurrentContent();
-    const names = this.inviteContentToString(
-      currentContent,
-      (content) => content.inviter
-    );
-    const invites = this.inviteContentToString(
-      currentContent,
-      (content) => content.invites.toString()
-    );
-
+  createEmbed(): EmbedBuilder {
     return new EmbedBuilder()
       .setTitle('Top inviters')
       .setColor(0x000000)
-      .addFields(
-        { name: 'Name', value: names, inline: true },
-        { name: 'Invites', value: invites, inline: true }
+      .addFields(this.autoCreateFields()
       )
       .setFooter(
         {
           text: 'Page ' + this.pageNumber + ' / ' + this.pageMax
         }
       );
-  }
-
-  async collect() {
-    const collector = this.message.channel.createMessageComponentCollector({
-      time: 1000 * 60
-    });
-
-    collector.on('collect', async i => {
-      if (i.user.id !== this.message.member.id) {
-        return;
-      }
-
-      switch (i.customId) {
-        case this.previousId:
-          this.previous()
-          break;
-        case this.nextId:
-          this.next();
-          break;
-        default:
-          break;
-      }
-
-      await i.deferUpdate();
-      await i.editReply(
-        {
-          embeds: [ this.createEmbed() ],
-          components: [ this.createButtons() ]
-        }
-      ); 
-
-    });
-  }
-
-  async reply() {
-    await this.message.reply(
-      {
-        embeds: [ this.createEmbed() ],
-        components: [ this.createButtons() ]
-      }
-    );
   }
 }
 
